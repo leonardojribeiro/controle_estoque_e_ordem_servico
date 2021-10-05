@@ -1,0 +1,4 @@
+enum StoreState {
+  available,
+  initial,
+}
