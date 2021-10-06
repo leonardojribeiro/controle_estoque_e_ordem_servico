@@ -4,13 +4,16 @@ class AuthController {
   final auth = FirebaseAuth.instance;
   final userStream = FirebaseAuth.instance.authStateChanges();
   IdTokenResult? _currentToken;
+  t() async {
+    print(await auth.currentUser?.getIdTokenResult());
+  }
 
   AuthController() {
     print('authController instantiation');
+    t();
   }
 
-  Future<void> signInWithEmailAndPassword(
-      {required String email, required String password}) async {
+  Future<void> signInWithEmailAndPassword({required String email, required String password}) async {
     await auth.signInWithEmailAndPassword(email: email, password: password);
   }
 

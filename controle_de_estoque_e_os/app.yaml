@@ -1,0 +1,16 @@
+runtime: python27
+service: controle-app
+threadsafe: true
+handlers:
+  - url: /
+    static_files: index.html
+    upload: index.html
+  - url: /robots.txt
+    static_files: robots.txt
+    upload: robots.txt
+  - url: /(.*\.(gif|media|json|ico|eot|ttf|woff|woff2|png|jpg|css|js|otf))$
+    static_files: \1
+    upload: (.*)
+  - url: /(.*)
+    static_files: index.html
+    upload: index.html

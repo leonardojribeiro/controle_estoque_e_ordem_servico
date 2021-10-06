@@ -4,12 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class ApiService {
-  final _dio = Dio(BaseOptions(baseUrl: 'http://192.168.1.100:3333/'));
+  final _dio = Dio(BaseOptions(baseUrl: 'http://192.168.1.105:3333/'));
 
-  Future<dynamic> post(
-      {required String url,
-      dynamic data,
-      Map<String, dynamic>? queryParameters}) async {
+  Future<dynamic> post({required String url, dynamic data, Map<String, dynamic>? queryParameters}) async {
     try {
       final _options = Options(headers: {
         'Authorization': await Modular.get<AuthController>().getToken(),
@@ -34,10 +31,7 @@ class ApiService {
     }
   }
 
-  Future<dynamic> put(
-      {required String url,
-      dynamic data,
-      Map<String, dynamic>? queryParameters}) async {
+  Future<dynamic> put({required String url, dynamic data, Map<String, dynamic>? queryParameters}) async {
     try {
       final _options = Options(headers: {
         'Authorization': await Modular.get<AuthController>().getToken(),

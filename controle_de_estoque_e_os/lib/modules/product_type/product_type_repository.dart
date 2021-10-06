@@ -11,10 +11,12 @@ class ProductTypeRepository {
     return [];
   }
 
-  Future<bool> createProduct({required String description}) async {
-    return await Modular.get<ApiService>().post(url: 'product_types', data: {
-          'description': description,
-        }) !=
-        null;
+  Future<dynamic> createProduct({required String description}) async {
+    return Modular.get<ApiService>().post(
+      url: 'product_types',
+      data: {
+        'description': description,
+      },
+    );
   }
 }

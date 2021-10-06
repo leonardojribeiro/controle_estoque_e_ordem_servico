@@ -4,10 +4,8 @@ import 'package:controle_de_estoque_e_os/shared/models/product_type_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 
-class ProductTypeStore
-    extends NotifierStore<ErrorDescription, ProductTypeState> {
-  ProductTypeStore({required this.repository})
-      : super(ProductTypeState(products: []));
+class ProductTypeStore extends NotifierStore<ErrorDescription, ProductTypeState> {
+  ProductTypeStore({required this.repository}) : super(ProductTypeState(products: []));
 
   final ProductTypeRepository repository;
 
@@ -21,7 +19,8 @@ class ProductTypeStore
   }
 
   Future<bool> createProductType({required String description}) async {
-    final success = await repository.createProduct(description: description);
+    final result = await repository.createProduct(description: description);
+    final success = result != null;
     if (success) {
       findAll();
     }

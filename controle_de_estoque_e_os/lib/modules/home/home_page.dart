@@ -26,6 +26,18 @@ class _HomePageState extends State<HomePage> {
           ),
           OutlinedButton(
             onPressed: () {
+              Modular.to.pushNamed('/product_brands/');
+            },
+            child: Text('Marcas de produto'),
+          ),
+          OutlinedButton(
+            onPressed: () {
+              Modular.to.pushNamed('/products/');
+            },
+            child: Text('Produtos'),
+          ),
+          OutlinedButton(
+            onPressed: () {
               Modular.get<AuthController>().auth.signOut();
             },
             child: Text('Sair'),
