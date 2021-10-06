@@ -17,6 +17,8 @@ class AuthController {
     await auth.signInWithEmailAndPassword(email: email, password: password);
   }
 
+  Future<void> createUserWithEmailAndPassword({required String email, required String password}) async {}
+
   Future<String?> getToken() async {
     if (_currentToken?.expirationTime?.isAfter(DateTime.now()) == true) {
       return _currentToken?.token;

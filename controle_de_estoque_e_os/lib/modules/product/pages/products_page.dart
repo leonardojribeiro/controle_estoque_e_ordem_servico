@@ -1,6 +1,4 @@
 import 'package:controle_de_estoque_e_os/modules/product/product_store.dart';
-import 'package:controle_de_estoque_e_os/modules/product_brand/product_brand_store.dart';
-import 'package:controle_de_estoque_e_os/shared/enums/store_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
@@ -26,7 +24,7 @@ class _ProductsPageState extends ModularState<ProductsPage, ProductStore> {
         title: Text('Produtos'),
       ),
       body: ScopedBuilder<ProductStore, ErrorDescription, ProductState>(
-        store: store,
+        store: Modular.get<ProductStore>(),
         onLoading: (context) => Center(
           child: CircularProgressIndicator(),
         ),
@@ -40,8 +38,12 @@ class _ProductsPageState extends ModularState<ProductsPage, ProductStore> {
             child: Column(
               children: state.products
                       ?.map(
-                        (e) => ListTile(
-                          title: Text(e.description ?? ''),
+                        (product) => ListTile(
+                          title: Text(product.description ?? ''),
+                          subtitle: Text('Em estoque: ${product.quantityInStock ?? 0}'),
+                          onTap: () {
+                            Modular.to.pushNamed('/products/${product.id}/');
+                          },
                         ),
                       )
                       .toList() ??
@@ -54,7 +56,7 @@ class _ProductsPageState extends ModularState<ProductsPage, ProductStore> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           Modular.to.pushNamed('/products/add/');
         },
         child: Icon(Icons.add),

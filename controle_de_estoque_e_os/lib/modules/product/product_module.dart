@@ -1,4 +1,5 @@
 import 'package:controle_de_estoque_e_os/modules/product/pages/product_form_page.dart';
+import 'package:controle_de_estoque_e_os/modules/product/pages/product_view_page.dart';
 import 'package:controle_de_estoque_e_os/modules/product/pages/products_page.dart';
 import 'package:controle_de_estoque_e_os/modules/product/product_repository.dart';
 import 'package:controle_de_estoque_e_os/modules/product/product_store.dart';
@@ -21,5 +22,11 @@ class ProductModule extends Module {
   List<ModularRoute> get routes => [
         ChildRoute('/', child: (context, args) => ProductsPage()),
         ChildRoute('/add/', child: (context, args) => ProductFormPage()),
+        ChildRoute(
+          '/:id/',
+          child: (context, args) => ProductViewPage(
+            productId: args.params['id'],
+          ),
+        ),
       ];
 }

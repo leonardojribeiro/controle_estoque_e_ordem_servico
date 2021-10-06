@@ -11,11 +11,48 @@ class ProductRepository {
     return [];
   }
 
-  Future<dynamic> create({required String description}) async {
+  Future<ProductModel?> findById({required String id}) async {
+    final product = await Modular.get<ApiService>().get(url: 'products/$id');
+    if (product != null) {
+      return ProductModel.fromMap(product);
+    }
+  }
+
+  Future<dynamic> create({required ProductModel product}) async {
     return Modular.get<ApiService>().post(
       url: 'products',
       data: {
-        'description': description,
+        ...product.toMap(),
+        'productType': product.productType?.id,
+        'productBrand': product.productBrand?.id,
+      },
+    );
+  }
+
+  Future<dynamic> addStock({required String id, required int quantity}) async {
+    print(id + '$quantity');
+    return Modular.get<ApiService>().put(
+      url: 'products/$id/add_stock',
+      data: {
+        'quantity': quantity,
+      },
+    );
+  }
+
+  Future<dynamic> removeStock({required String id, required int quantity}) async {
+    return Modular.get<ApiService>().put(
+      url: 'products/$id/remove_stock',
+      data: {
+        'quantity': quantity,
+      },
+    );
+  }
+
+  Future<dynamic> refreshStock({required String id, required int quantity}) async {
+    return Modular.get<ApiService>().put(
+      url: 'products/$id/refresh_stock',
+      data: {
+        'quantity': quantity,
       },
     );
   }

@@ -12,7 +12,7 @@ class ProductModel {
     this.salePrice,
     this.quantityInStock,
     this.minimumQuantity,
-    this.quanatityIn,
+    this.quantityIn,
     this.quantityOut,
   });
 
@@ -21,13 +21,13 @@ class ProductModel {
       id: map['id'],
       description: map['description'],
       additionalInfo: map['additionalInfo'],
-      productType: ProductTypeModel.fromMap(map['productType']),
-      productBrand: ProductBrandModel.fromMap(map['productBrand']),
+      productType: map['productType'] != null ? ProductTypeModel.fromMap(map['productType']) : null,
+      productBrand: map['productBrand'] != null ? ProductBrandModel.fromMap(map['productBrand']) : null,
       costPrice: map['costPrice'],
       salePrice: map['salePrice'],
       quantityInStock: map['quantityInStock'],
       minimumQuantity: map['minimumQuantity'],
-      quanatityIn: map['quanatityIn'],
+      quantityIn: map['quantityIn'],
       quantityOut: map['quantityOut'],
     );
   }
@@ -41,7 +41,7 @@ class ProductModel {
   final num? salePrice;
   final num? quantityInStock;
   final num? minimumQuantity;
-  final num? quanatityIn;
+  final num? quantityIn;
   final num? quantityOut;
 
   ProductModel copyWith({
@@ -54,7 +54,7 @@ class ProductModel {
     num? salePrice,
     num? quantityInStock,
     num? minimumQuantity,
-    num? quanatityIn,
+    num? quantityIn,
     num? quantityOut,
   }) {
     return ProductModel(
@@ -67,13 +67,29 @@ class ProductModel {
       salePrice: salePrice ?? this.salePrice,
       quantityInStock: quantityInStock ?? this.quantityInStock,
       minimumQuantity: minimumQuantity ?? this.minimumQuantity,
-      quanatityIn: quanatityIn ?? this.quanatityIn,
+      quantityIn: quantityIn ?? this.quantityIn,
       quantityOut: quantityOut ?? this.quantityOut,
     );
   }
 
   @override
   String toString() {
-    return 'ProductModel(id: $id, description: $description, additionalInfo: $additionalInfo, productType: $productType, productBrand: $productBrand, costPrice: $costPrice, salePrice: $salePrice, quantityInStock: $quantityInStock, minimumQuantity: $minimumQuantity, quanatityIn: $quanatityIn, quantityOut: $quantityOut)';
+    return 'ProductModel(id: $id, description: $description, additionalInfo: $additionalInfo, productType: $productType, productBrand: $productBrand, costPrice: $costPrice, salePrice: $salePrice, quantityInStock: $quantityInStock, minimumQuantity: $minimumQuantity, quantityIn: $quantityIn, quantityOut: $quantityOut)';
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'description': description,
+      'additionalInfo': additionalInfo,
+      'productType': productType?.toMap(),
+      'productBrand': productBrand?.toMap(),
+      'costPrice': costPrice,
+      'salePrice': salePrice,
+      'quantityInStock': quantityInStock,
+      'minimumQuantity': minimumQuantity,
+      'quantityIn': quantityIn,
+      'quantityOut': quantityOut,
+    };
   }
 }

@@ -26,4 +26,11 @@ class ProductTypeModel {
 
   @override
   String toString() => 'ProductTypeModel(id: $id, description: $description)';
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'description': description,
+    };
+  }
 }

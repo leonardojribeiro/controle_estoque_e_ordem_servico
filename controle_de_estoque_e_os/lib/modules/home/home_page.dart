@@ -1,46 +1,43 @@
-import 'package:controle_de_estoque_e_os/modules/auth/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Controle de Estoque e OS'),
+        title: Text('Controle de Estoque e Ordem de Serviço'),
       ),
-      body: Wrap(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          OutlinedButton(
-            onPressed: () {
-              Modular.to.pushNamed('/product_types/');
-            },
-            child: Text('Tipos de produto'),
+          Center(
+            child: Text(
+              'Bem vindo ao Controle de Estoque e Ordem de Serviço.',
+              style: TextStyle(fontSize: 22),
+            ),
           ),
-          OutlinedButton(
-            onPressed: () {
-              Modular.to.pushNamed('/product_brands/');
-            },
-            child: Text('Marcas de produto'),
-          ),
-          OutlinedButton(
-            onPressed: () {
-              Modular.to.pushNamed('/products/');
-            },
-            child: Text('Produtos'),
-          ),
-          OutlinedButton(
-            onPressed: () {
-              Modular.get<AuthController>().auth.signOut();
-            },
-            child: Text('Sair'),
+          Center(child: Text('Para continuar, é necessário estar identificado.')),
+          Center(
+            child: Wrap(
+              children: [
+                OutlinedButton(
+                  onPressed: () {
+                    Modular.to.pushNamed('/login/');
+                  },
+                  child: Text('Fazer Login'),
+                ),
+                OutlinedButton(
+                  onPressed: () {
+                    Modular.to.pushNamed('/sign_up/');
+                  },
+                  child: Text('Criar Conta'),
+                ),
+              ],
+            ),
           ),
         ],
       ),

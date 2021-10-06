@@ -87,10 +87,10 @@ class ApiService {
     required String url,
     Map<String, dynamic>? queryParamters,
   }) async {
-    final _options = Options(headers: {
-      'Authorization': await Modular.get<AuthController>().getToken(),
-    });
     try {
+      final _options = Options(headers: {
+        'Authorization': await Modular.get<AuthController>().getToken(),
+      });
       final resposta = await _dio.get(
         url,
         queryParameters: queryParamters,

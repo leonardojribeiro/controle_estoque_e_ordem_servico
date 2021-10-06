@@ -25,4 +25,11 @@ class ProductBrandModel {
 
   @override
   String toString() => 'ProductBrandModel(id: $id, description: $description)';
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'description': description,
+    };
+  }
 }
