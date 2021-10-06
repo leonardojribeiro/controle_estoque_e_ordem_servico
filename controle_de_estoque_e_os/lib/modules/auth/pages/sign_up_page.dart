@@ -22,6 +22,49 @@ class _SignUpPageState extends ModularState<SignUpPage, EstablishimentStore> {
   final firstFormKey = GlobalKey<FormState>();
   final secondFormKey = GlobalKey<FormState>();
 
+  final errorNotifier = ValueNotifier<String?>(null);
+
+  Future<void> signUp() async {
+    errorNotifier.value = null;
+    try {
+      if (secondFormKey.currentState?.validate() == true) {
+        final credentials = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        if (credentials.user != null) {
+          final result = await store.create(
+            estalishiment: EstalishimentModel(
+              displayName: displayNameController.text,
+            ),
+          );
+          if (result) {
+            Modular.to.pop(true);
+          } else {
+            await credentials.user?.delete();
+          }
+        }
+      }
+    } on FirebaseAuthException catch (error) {
+      switch (error.code) {
+        case 'email-already-in-use':
+          errorNotifier.value = 'Email já utilizado.';
+          break;
+        case 'weak-password':
+          errorNotifier.value = 'Senha muito fraca.';
+          break;
+        case 'operation-not-allowed':
+          errorNotifier.value = 'Operação não permitida.';
+          break;
+        case 'invalid-email':
+          errorNotifier.value = 'Email inválido.';
+          break;
+      }
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,6 +163,23 @@ class _SignUpPageState extends ModularState<SignUpPage, EstablishimentStore> {
                                 ],
                               ),
                             ),
+                            ValueListenableBuilder<String?>(
+                              valueListenable: errorNotifier,
+                              builder: (context, error, child) {
+                                if (error != null) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Center(
+                                      child: Text(
+                                        error,
+                                        style: TextStyle(color: Theme.of(context).errorColor),
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return Container();
+                              },
+                            ),
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8.0),
                               child: Row(
@@ -132,25 +192,7 @@ class _SignUpPageState extends ModularState<SignUpPage, EstablishimentStore> {
                                     child: Text('Voltar'),
                                   ),
                                   OutlinedButton(
-                                    onPressed: () async {
-                                      if (secondFormKey.currentState?.validate() == true) {
-                                        final credentials = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-                                        print('credentials.credential');
-                                        print(credentials.credential);
-                                        if (credentials.user != null) {
-                                          print('aq');
-                                          final result = await store.create(
-                                            estalishiment: EstalishimentModel(
-                                              displayName: displayNameController.text,
-                                            ),
-                                          );
-                                          print(result);
-                                          if (!result) {
-                                            await credentials.user?.delete();
-                                          }
-                                        }
-                                      }
-                                    },
+                                    onPressed: signUp,
                                     child: Text('Criar Conta'),
                                   ),
                                 ],
@@ -172,8 +214,11 @@ class _SignUpPageState extends ModularState<SignUpPage, EstablishimentStore> {
                             color: Theme.of(context).primaryColor,
                           ),
                           recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              Modular.to.pushReplacementNamed('/login/');
+                            ..onTap = () async {
+                              final login = await Modular.to.pushNamed('/login/');
+                              if (login == true) {
+                                Modular.to.pop(true);
+                              }
                             },
                         ),
                       ],

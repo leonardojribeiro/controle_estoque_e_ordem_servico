@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class ApiService {
-  final _dio = Dio(BaseOptions(baseUrl: 'http://192.168.1.105:3333/'));
+  final _dio = Dio(BaseOptions(baseUrl: 'https://controle-api-dot-global-leo.rj.r.appspot.com/'));
 
   Future<dynamic> post({required String url, dynamic data, Map<String, dynamic>? queryParameters}) async {
     try {

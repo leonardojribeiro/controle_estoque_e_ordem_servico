@@ -10,8 +10,13 @@ class EstablishimentStore extends NotifierStore<ErrorDescription, Establishiment
   final EstablishimentRepository repository;
 
   Future<bool> create({required EstalishimentModel estalishiment}) async {
-    final result = await repository.create(estalishiment: estalishiment);
-    return result != null;
+    try {
+      final result = await repository.create(estalishiment: estalishiment);
+      return result != null;
+    } catch (error) {
+      print(error);
+      return false;
+    }
   }
 }
 

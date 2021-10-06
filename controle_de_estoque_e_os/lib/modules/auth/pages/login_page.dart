@@ -1,7 +1,8 @@
-import 'package:controle_de_estoque_e_os/modules/auth/auth_controller.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_text_field/flutter_text_field.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -13,6 +14,38 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final errorNotifier = ValueNotifier<String?>(null);
+
+  Future<void> signIn() async {
+    errorNotifier.value = null;
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+      if (FirebaseAuth.instance.currentUser != null) {
+        Modular.to.pop(true);
+      }
+    } on FirebaseAuthException catch (error) {
+      switch (error.code) {
+        case 'user-not-found':
+          errorNotifier.value = 'Usuário não encontrado.';
+          break;
+        case 'wrong-password':
+          errorNotifier.value = 'Senha incorreta.';
+          break;
+        case 'user-disabled':
+          errorNotifier.value = 'Usuário desabilitado.';
+          break;
+        case 'invalid-email':
+          errorNotifier.value = 'Email inválido.';
+          break;
+      }
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,28 +62,38 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextFormField(
+                  FlutterTextField.email(
                     controller: emailController,
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                    ),
+                    labelText: 'Email',
+                    required: true,
                   ),
-                  TextFormField(
+                  FlutterTextField.senha(
                     controller: passwordController,
-                    decoration: InputDecoration(
-                      labelText: 'Senha',
-                    ),
+                    labelText: 'Senha',
+                    validator: (password) => (password?.length ?? 0) >= 6 == true ? null : 'A senha deve ter pelo menos 6 caracteres',
+                  ),
+                  ValueListenableBuilder<String?>(
+                    valueListenable: errorNotifier,
+                    builder: (context, error, child) {
+                      if (error != null) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Text(
+                              error,
+                              style: TextStyle(color: Theme.of(context).errorColor),
+                            ),
+                          ),
+                        );
+                      }
+                      return Container();
+                    },
                   ),
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: OutlinedButton(
-                        onPressed: () {
-                          Modular.get<AuthController>().signInWithEmailAndPassword(
-                            email: emailController.text,
-                            password: passwordController.text,
-                          );
-                        },
+                        onPressed: signIn,
                         child: Text('Login'),
                       ),
                     ),
@@ -66,8 +109,11 @@ class _LoginPageState extends State<LoginPage> {
                             color: Theme.of(context).primaryColor,
                           ),
                           recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              Modular.to.pushNamed('/sign_up/');
+                            ..onTap = () async {
+                              final signed = await Modular.to.pushNamed('/sign_up/');
+                              if (signed == true) {
+                                Modular.to.pop(true);
+                              }
                             },
                         ),
                       ],
