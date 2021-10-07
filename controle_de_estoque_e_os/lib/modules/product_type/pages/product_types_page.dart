@@ -1,4 +1,5 @@
 import 'package:controle_de_estoque_e_os/modules/product_type/product_type_store.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
@@ -34,17 +35,22 @@ class _ProductTypesPageState extends ModularState<ProductTypesPage, ProductTypeS
               child: Text('Nenhum tipo de produto encontrado.'),
             );
           }
-          return SingleChildScrollView(
-            child: Column(
-              children: state.products
-                      ?.map(
-                        (e) => ListTile(
-                          title: Text(e.description ?? ''),
-                        ),
-                      )
-                      .toList() ??
-                  [],
-            ),
+          return CustomScrollView(
+            scrollBehavior: CupertinoScrollBehavior(),
+            slivers: [
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  state.products
+                          ?.map(
+                            (e) => ListTile(
+                              title: Text(e.description ?? ''),
+                            ),
+                          )
+                          .toList() ??
+                      [],
+                ),
+              ),
+            ],
           );
         },
         onError: (context, error) => Center(
