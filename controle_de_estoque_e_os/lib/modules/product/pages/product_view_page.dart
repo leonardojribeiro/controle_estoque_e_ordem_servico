@@ -141,7 +141,7 @@ class _ProductViewPageState extends ModularState<ProductViewPage, ProductStore> 
                               tooltip: 'Editar',
                               mini: true,
                               onPressed: () {
-                                store.findAll();
+                                Modular.to.pushNamed('/products/${state.product?.id}/update/');
                               },
                               child: Icon(Icons.edit),
                             ),

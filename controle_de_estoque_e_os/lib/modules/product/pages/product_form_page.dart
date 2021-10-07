@@ -1,14 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_text_field/flutter_text_field.dart';
+import 'package:flutter_triple/flutter_triple.dart';
+
 import 'package:controle_de_estoque_e_os/modules/product/product_store.dart';
 import 'package:controle_de_estoque_e_os/shared/models/product_brand_model.dart';
 import 'package:controle_de_estoque_e_os/shared/models/product_model.dart';
 import 'package:controle_de_estoque_e_os/shared/models/product_type_model.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_triple/flutter_triple.dart';
-import 'package:flutter_text_field/flutter_text_field.dart';
 
 class ProductFormPage extends StatefulWidget {
-  const ProductFormPage({Key? key}) : super(key: key);
+  const ProductFormPage({Key? key, this.productId}) : super(key: key);
+  final String? productId;
 
   @override
   _ProductFormPageState createState() => _ProductFormPageState();
@@ -26,7 +28,11 @@ class _ProductFormPageState extends ModularState<ProductFormPage, ProductStore> 
 
   @override
   void initState() {
-    store.fetchTypesAndBrands();
+    if (widget.productId != null) {
+      store.fetchTypesBrandsAndProductById(id: widget.productId ?? '');
+    } else {
+      store.fetchTypesAndBrands();
+    }
     super.initState();
   }
 
@@ -34,7 +40,7 @@ class _ProductFormPageState extends ModularState<ProductFormPage, ProductStore> 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Adicionar Produto'),
+        title: Text(widget.productId != null ? 'Editar Produto' : 'Adicionar Produto'),
       ),
       body: ScopedBuilder<ProductStore, ErrorDescription, ProductState>(
         store: store,
@@ -70,6 +76,12 @@ class _ProductFormPageState extends ModularState<ProductFormPage, ProductStore> 
               ),
             );
           }
+          if (state.product != null && widget.productId != null) {
+            descriptionController.text = state.product?.description ?? '';
+            additionalInfoController.text = state.product?.additionalInfo ?? '';
+            productBrandId = state.product?.productBrand?.id ?? '';
+            productTypeId = state.product?.productType?.id ?? '';
+          }
           return SingleChildScrollView(
             child: Center(
               child: ConstrainedBox(
@@ -98,6 +110,7 @@ class _ProductFormPageState extends ModularState<ProductFormPage, ProductStore> 
                                   )
                                   .toList() ??
                               [],
+                          value: state.product?.productType?.id,
                         ),
                         if (state.typesAndBrands?.productBrands.isNotEmpty == true)
                           DropdownButtonFormField<String?>(
@@ -114,6 +127,7 @@ class _ProductFormPageState extends ModularState<ProductFormPage, ProductStore> 
                                     )
                                     .toList() ??
                                 [],
+                            value: state.product?.productBrand?.id,
                           )
                         else
                           Padding(
@@ -137,21 +151,25 @@ class _ProductFormPageState extends ModularState<ProductFormPage, ProductStore> 
                         FlutterTextField.moeda(
                           labelText: 'Preço de Custo',
                           controller: costPriceController,
+                          initialText: state.product?.costPrice,
                           min: 0,
                         ),
                         FlutterTextField.moeda(
                           labelText: 'Preço de Venda',
                           controller: salePriceController,
+                          initialText: state.product?.salePrice,
                           min: 0,
                         ),
-                        FlutterTextField.numero(
-                          labelText: 'Quantidade em Estoque',
-                          controller: quantityInStockController,
-                          min: 0,
-                        ),
+                        if (widget.productId == null)
+                          FlutterTextField.numero(
+                            labelText: 'Quantidade em Estoque',
+                            controller: quantityInStockController,
+                            min: 0,
+                          ),
                         FlutterTextField.numero(
                           labelText: 'Quantidade mínima em Estoque',
                           controller: minimumQuantityController,
+                          initialText: state.product?.minimumQuantity?.toInt().toString(),
                           min: 0,
                         ),
                         TextFormField(
@@ -165,22 +183,36 @@ class _ProductFormPageState extends ModularState<ProductFormPage, ProductStore> 
                             padding: const EdgeInsets.all(8.0),
                             child: OutlinedButton(
                               onPressed: () async {
-                                if (await store.create(
-                                  product: ProductModel(
-                                    description: descriptionController.text,
-                                    additionalInfo: additionalInfoController.text,
-                                    productBrand: ProductBrandModel(id: productBrandId),
-                                    productType: ProductTypeModel(id: productTypeId),
-                                    minimumQuantity: int.tryParse(minimumQuantityController.text),
-                                    costPrice: num.tryParse(costPriceController.unmaskedText),
-                                    salePrice: num.tryParse(salePriceController.unmaskedText),
-                                    quantityInStock: int.tryParse(quantityInStockController.text),
-                                  ),
-                                )) {
+                                final result = widget.productId == null
+                                    ? await store.create(
+                                        product: ProductModel(
+                                          description: descriptionController.text,
+                                          additionalInfo: additionalInfoController.text,
+                                          productBrand: ProductBrandModel(id: productBrandId),
+                                          productType: ProductTypeModel(id: productTypeId),
+                                          minimumQuantity: int.tryParse(minimumQuantityController.text),
+                                          costPrice: num.tryParse(costPriceController.unmaskedText),
+                                          salePrice: num.tryParse(salePriceController.unmaskedText),
+                                          quantityInStock: int.tryParse(quantityInStockController.text),
+                                        ),
+                                      )
+                                    : await store.updateProduct(
+                                        product: ProductModel(
+                                          description: descriptionController.text,
+                                          additionalInfo: additionalInfoController.text,
+                                          productBrand: ProductBrandModel(id: productBrandId),
+                                          productType: ProductTypeModel(id: productTypeId),
+                                          minimumQuantity: int.tryParse(minimumQuantityController.text),
+                                          costPrice: num.tryParse(costPriceController.unmaskedText),
+                                          salePrice: num.tryParse(salePriceController.unmaskedText),
+                                          id: widget.productId,
+                                        ),
+                                      );
+                                if (result == true) {
                                   Modular.to.pop();
                                 }
                               },
-                              child: Text('Adicionar Produto'),
+                              child: Text(widget.productId != null ? 'Editar Produto' : 'Adicionar Produto'),
                             ),
                           ),
                         ),

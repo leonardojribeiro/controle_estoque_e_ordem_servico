@@ -22,7 +22,9 @@ class _SignUpPageState extends ModularState<SignUpPage, EstablishimentStore> {
   final pageController = PageController();
   final firstFormKey = GlobalKey<FormState>();
   final secondFormKey = GlobalKey<FormState>();
-
+  final createButtonFocus = FocusNode();
+  final nextButtonFocus = FocusNode();
+  final confirmPasswordFocus = FocusNode();
   final errorNotifier = ValueNotifier<String?>(null);
 
   Future<void> signUp() async {
@@ -102,11 +104,10 @@ class _SignUpPageState extends ModularState<SignUpPage, EstablishimentStore> {
                             ),
                             Form(
                               key: firstFormKey,
-                              child: TextFormField(
+                              child: FlutterTextField(
                                 controller: displayNameController,
-                                decoration: InputDecoration(
-                                  labelText: 'Nome Fantasia',
-                                ),
+                                labelText: 'Nome Fantasia',
+                                nextFocus: nextButtonFocus,
                                 validator: (displayName) => displayName?.isEmpty == true ? 'Informe o nome fantasia' : null,
                               ),
                             ),
@@ -116,6 +117,7 @@ class _SignUpPageState extends ModularState<SignUpPage, EstablishimentStore> {
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   OutlinedButton(
+                                    focusNode: nextButtonFocus,
                                     onPressed: () {
                                       if (firstFormKey.currentState?.validate() == true) {
                                         pageController.nextPage(duration: const Duration(milliseconds: 350), curve: Curves.ease);
@@ -150,11 +152,14 @@ class _SignUpPageState extends ModularState<SignUpPage, EstablishimentStore> {
                                   FlutterTextField.senha(
                                     controller: passwordController,
                                     labelText: 'Senha',
+                                    nextFocus: confirmPasswordFocus,
                                     required: true,
                                     validator: (password) => (password?.length ?? 0) >= 6 == true ? null : 'A senha deve ter pelo menos 6 caracteres',
                                   ),
                                   FlutterTextField.senha(
                                     controller: confirmPasswordController,
+                                    focusNode: confirmPasswordFocus,
+                                    nextFocus: createButtonFocus,
                                     labelText: 'Confirme sua Senha',
                                     required: true,
                                     validator: (password) {
@@ -195,6 +200,7 @@ class _SignUpPageState extends ModularState<SignUpPage, EstablishimentStore> {
                                     child: Text('Voltar'),
                                   ),
                                   OutlinedButton(
+                                    focusNode: createButtonFocus,
                                     onPressed: signUp,
                                     child: Text('Criar Conta'),
                                   ),

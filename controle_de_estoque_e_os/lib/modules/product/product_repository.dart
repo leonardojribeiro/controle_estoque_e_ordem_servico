@@ -29,6 +29,17 @@ class ProductRepository {
     );
   }
 
+  Future<dynamic> update({required ProductModel product}) async {
+    return Modular.get<ApiService>().put(
+      url: 'products/${product.id}',
+      data: {
+        ...product.toMap(),
+        'productType': product.productType?.id,
+        'productBrand': product.productBrand?.id,
+      },
+    );
+  }
+
   Future<dynamic> addStock({required String id, required int quantity}) async {
     print(id + '$quantity');
     return Modular.get<ApiService>().put(

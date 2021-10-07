@@ -22,6 +22,7 @@ class ProductModule extends Module {
   List<ModularRoute> get routes => [
         ChildRoute('/', child: (context, args) => ProductsPage()),
         ChildRoute('/add/', child: (context, args) => ProductFormPage()),
+        ChildRoute('/:id/update/', child: (context, args) => ProductFormPage(productId: args.params['id'])),
         ChildRoute(
           '/:id/',
           child: (context, args) => ProductViewPage(

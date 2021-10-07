@@ -15,6 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final errorNotifier = ValueNotifier<String?>(null);
+  final loginButtonFocus = FocusNode();
 
   Future<void> signIn() async {
     errorNotifier.value = null;
@@ -71,6 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                     controller: passwordController,
                     labelText: 'Senha',
                     validator: (password) => (password?.length ?? 0) >= 6 == true ? null : 'A senha deve ter pelo menos 6 caracteres',
+                    nextFocus: loginButtonFocus,
                   ),
                   ValueListenableBuilder<String?>(
                     valueListenable: errorNotifier,
@@ -93,6 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: OutlinedButton(
+                        focusNode: loginButtonFocus,
                         onPressed: signIn,
                         child: Text('Login'),
                       ),

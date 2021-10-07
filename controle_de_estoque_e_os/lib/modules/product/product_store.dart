@@ -47,6 +47,15 @@ class ProductStore extends NotifierStore<ErrorDescription, ProductState> {
     return success;
   }
 
+  Future<bool> updateProduct({required ProductModel product}) async {
+    final result = await repository.update(product: product);
+    final success = result != null;
+    if (success) {
+      refresh();
+    }
+    return success;
+  }
+
   Future<bool> addStock({required int quantity}) async {
     final result = await repository.addStock(id: state.product?.id ?? '', quantity: quantity);
     final success = result != null;
@@ -77,6 +86,18 @@ class ProductStore extends NotifierStore<ErrorDescription, ProductState> {
   Future<void> fetchTypesAndBrands() async {
     execute(
       () async => state.copyWith(
+        typesAndBrands: TypesAndBrands(
+          productBrands: await productBrandRepository.findAll(),
+          productTypes: await productTypeRepository.findAll(),
+        ),
+      ),
+    );
+  }
+
+  Future<void> fetchTypesBrandsAndProductById({required String id}) async {
+    execute(
+      () async => state.copyWith(
+        product: await repository.findById(id: id),
         typesAndBrands: TypesAndBrands(
           productBrands: await productBrandRepository.findAll(),
           productTypes: await productTypeRepository.findAll(),
