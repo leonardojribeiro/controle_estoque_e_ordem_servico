@@ -38,7 +38,7 @@ class _HomePageSignedState extends State<HomePageSigned> {
           ),
           OutlinedButton(
             onPressed: () {
-              Modular.get<AuthController>().auth.signOut();
+              Modular.get<AuthController>().signOut();
             },
             child: Text('Sair'),
           ),

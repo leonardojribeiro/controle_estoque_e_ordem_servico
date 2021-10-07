@@ -4,20 +4,11 @@ class AuthController {
   final auth = FirebaseAuth.instance;
   final userStream = FirebaseAuth.instance.authStateChanges();
   IdTokenResult? _currentToken;
-  t() async {
-    print(await auth.currentUser?.getIdTokenResult());
-  }
 
-  AuthController() {
-    print('authController instantiation');
-    t();
+  Future<void> signOut() async {
+    await auth.signOut();
+    _currentToken = null;
   }
-
-  Future<void> signInWithEmailAndPassword({required String email, required String password}) async {
-    await auth.signInWithEmailAndPassword(email: email, password: password);
-  }
-
-  Future<void> createUserWithEmailAndPassword({required String email, required String password}) async {}
 
   Future<String?> getToken() async {
     if (_currentToken?.expirationTime?.isAfter(DateTime.now()) == true) {
