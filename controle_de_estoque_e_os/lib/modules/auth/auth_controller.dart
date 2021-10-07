@@ -14,7 +14,7 @@ class AuthController {
     if (_currentToken?.expirationTime?.isAfter(DateTime.now()) == true) {
       return _currentToken?.token;
     } else {
-      _currentToken = await auth.currentUser?.getIdTokenResult();
+      _currentToken = await auth.currentUser?.getIdTokenResult(true);
       return _currentToken?.token;
     }
   }

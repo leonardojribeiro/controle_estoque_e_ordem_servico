@@ -1,5 +1,4 @@
 import 'package:controle_de_estoque_e_os/modules/product_brand/product_brand_repository.dart';
-import 'package:controle_de_estoque_e_os/shared/enums/store_state.dart';
 import 'package:controle_de_estoque_e_os/shared/models/product_brand_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_triple/flutter_triple.dart';
@@ -13,7 +12,6 @@ class ProductBrandStore extends NotifierStore<ErrorDescription, ProductBrandStat
     execute(
       () async => ProductBrandState(
         products: await repository.findAll(),
-        state: StoreState.available,
       ),
     );
   }
@@ -29,7 +27,8 @@ class ProductBrandStore extends NotifierStore<ErrorDescription, ProductBrandStat
 }
 
 class ProductBrandState {
-  ProductBrandState({required this.products, this.state = StoreState.initial});
-  final List<ProductBrandModel> products;
-  final StoreState state;
+  ProductBrandState({
+    this.products,
+  });
+  final List<ProductBrandModel>? products;
 }

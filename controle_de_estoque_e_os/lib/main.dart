@@ -116,8 +116,7 @@ class _AppWidgetState extends State<AppWidgets> {
           TextButton(
             onPressed: () async {
               print(FirebaseAuth.instance.currentUser);
-              print(await FirebaseAuth.instance.currentUser
-                  ?.getIdTokenResult(true));
+              print(await FirebaseAuth.instance.currentUser?.getIdTokenResult(true));
             },
             child: Text('PegarToken'),
           ),

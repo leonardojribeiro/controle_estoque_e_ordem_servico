@@ -1,3 +1,4 @@
+import 'package:controle_de_estoque_e_os/modules/auth/auth_controller.dart';
 import 'package:controle_de_estoque_e_os/modules/establishiment/establishiment_store.dart';
 import 'package:controle_de_estoque_e_os/shared/models/establishiment_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -28,6 +29,8 @@ class _SignUpPageState extends ModularState<SignUpPage, EstablishimentStore> {
     errorNotifier.value = null;
     try {
       if (secondFormKey.currentState?.validate() == true) {
+        final authController = Modular.get<AuthController>();
+        await authController.signOut();
         final credentials = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text,
           password: passwordController.text,

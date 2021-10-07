@@ -1,4 +1,0 @@
-enum StoreState {
-  available,
-  initial,
-}

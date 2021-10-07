@@ -1,5 +1,4 @@
 import 'package:controle_de_estoque_e_os/modules/product_type/product_type_store.dart';
-import 'package:controle_de_estoque_e_os/shared/enums/store_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
@@ -11,8 +10,7 @@ class ProductTypesPage extends StatefulWidget {
   _ProductTypesPageState createState() => _ProductTypesPageState();
 }
 
-class _ProductTypesPageState
-    extends ModularState<ProductTypesPage, ProductTypeStore> {
+class _ProductTypesPageState extends ModularState<ProductTypesPage, ProductTypeStore> {
   @override
   void initState() {
     store.findAll();
@@ -31,7 +29,7 @@ class _ProductTypesPageState
           child: CircularProgressIndicator(),
         ),
         onState: (context, state) {
-          if (state.state == StoreState.initial) {
+          if (state.products?.isEmpty == true) {
             return Center(
               child: Text('Nenhum tipo de produto encontrado.'),
             );
@@ -39,12 +37,13 @@ class _ProductTypesPageState
           return SingleChildScrollView(
             child: Column(
               children: state.products
-                  .map(
-                    (e) => ListTile(
-                      title: Text(e.description ?? ''),
-                    ),
-                  )
-                  .toList(),
+                      ?.map(
+                        (e) => ListTile(
+                          title: Text(e.description ?? ''),
+                        ),
+                      )
+                      .toList() ??
+                  [],
             ),
           );
         },

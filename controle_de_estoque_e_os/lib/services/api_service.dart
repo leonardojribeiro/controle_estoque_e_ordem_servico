@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class ApiService {
-  final _dio = Dio(BaseOptions(baseUrl: 'https://controle-api-dot-global-leo.rj.r.appspot.com/'));
+  final _dio = Dio(BaseOptions(baseUrl: 'http://192.168.1.100:3333/')); //https://controle-api-dot-global-leo.rj.r.appspot.com/'));
 
   Future<dynamic> post({required String url, dynamic data, Map<String, dynamic>? queryParameters}) async {
     try {
@@ -20,6 +20,7 @@ class ApiService {
       return resposta.data;
     } on DioError catch (e) {
       if (e.response != null) {
+        print(e.response?.data);
         if (e.response?.data != null) {
           throw ErrorDescription(e.response?.data['message'].toString() ?? '');
         }
