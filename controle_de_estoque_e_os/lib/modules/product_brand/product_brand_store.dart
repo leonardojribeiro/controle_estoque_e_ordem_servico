@@ -4,19 +4,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 
 class ProductBrandStore extends NotifierStore<ErrorDescription, ProductBrandState> {
-  ProductBrandStore({required this.repository}) : super(ProductBrandState(products: []));
+  ProductBrandStore({required this.repository}) : super(ProductBrandState(productBrands: []));
 
   final ProductBrandRepository repository;
 
   Future<void> findAll() async {
     execute(
       () async => ProductBrandState(
-        products: await repository.findAll(),
+        productBrands: await repository.findAll(),
       ),
     );
   }
 
-  Future<bool> createProductBrand({required String description}) async {
+  Future<bool> create({required String description}) async {
     final result = await repository.create(description: description);
     final success = result != null;
     if (success) {
@@ -28,7 +28,7 @@ class ProductBrandStore extends NotifierStore<ErrorDescription, ProductBrandStat
 
 class ProductBrandState {
   ProductBrandState({
-    this.products,
+    this.productBrands,
   });
-  final List<ProductBrandModel>? products;
+  final List<ProductBrandModel>? productBrands;
 }

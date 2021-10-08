@@ -2,6 +2,7 @@ import 'package:controle_de_estoque_e_os/modules/auth/auth_controller.dart';
 import 'package:controle_de_estoque_e_os/modules/auth/auth_page.dart';
 import 'package:controle_de_estoque_e_os/modules/auth/pages/login_page.dart';
 import 'package:controle_de_estoque_e_os/modules/auth/pages/sign_up_page.dart';
+import 'package:controle_de_estoque_e_os/modules/client/client_module.dart';
 import 'package:controle_de_estoque_e_os/modules/establishiment/establishiment_repository.dart';
 import 'package:controle_de_estoque_e_os/modules/establishiment/establishiment_store.dart';
 import 'package:controle_de_estoque_e_os/modules/product/product_module.dart';
@@ -30,5 +31,6 @@ class AppModule extends Module {
         ModuleRoute('/product_types', module: ProductTypeModule()),
         ModuleRoute('/product_brands', module: ProductBrandModule()),
         ModuleRoute('/products', module: ProductModule()),
+        ModuleRoute('/clients', module: ClientModule()),
       ];
 }

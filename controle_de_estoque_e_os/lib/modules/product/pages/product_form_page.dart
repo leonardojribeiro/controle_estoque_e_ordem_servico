@@ -212,7 +212,7 @@ class _ProductFormPageState extends ModularState<ProductFormPage, ProductStore> 
                                   Modular.to.pop();
                                 }
                               },
-                              child: Text(widget.productId != null ? 'Editar Produto' : 'Adicionar Produto'),
+                              child: Text(widget.productId != null ? 'Editar' : 'Adicionar'),
                             ),
                           ),
                         ),

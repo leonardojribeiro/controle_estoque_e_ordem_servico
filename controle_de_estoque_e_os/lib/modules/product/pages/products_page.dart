@@ -22,49 +22,54 @@ class _ProductsPageState extends ModularState<ProductsPage, ProductStore> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Produtos'),
-      ),
-      body: ScopedBuilder<ProductStore, ErrorDescription, ProductState>(
-        store: Modular.get<ProductStore>(),
+      body: ScopedBuilder<ProductStore, ErrorDescription, ProductState>.transition(
+        transition: (context, child) => AnimatedSwitcher(
+          duration: Duration(milliseconds: 400),
+          child: child,
+        ),
         onLoading: (context) => Center(
           child: CircularProgressIndicator(),
         ),
         onState: (context, state) {
-          if (state.products == null || state.products?.isEmpty == true) {
-            return Center(
-              child: Text('Nenhum produto encontrado.'),
-            );
-          }
-          return CardWidget(
-            child: CustomScrollView(
-              scrollBehavior: CupertinoScrollBehavior(),
-              slivers: [
+          return CustomScrollView(
+            scrollBehavior: CupertinoScrollBehavior(),
+            slivers: [
+              SliverAppBar(
+                onStretchTrigger: () async {
+                  store.findAll();
+                },
+                stretch: true,
+                flexibleSpace: FlexibleSpaceBar(
+                  stretchModes: [StretchMode.fadeTitle],
+                  centerTitle: false,
+                  title: Text('Produtos'),
+                ),
+                expandedHeight: 150,
+              ),
+              if (state.products?.isNotEmpty == true)
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    state.products
+                            ?.map(
+                              (product) => ListTile(
+                                title: Text(product.description ?? ''),
+                                subtitle: Text('Em estoque: ${product.quantityInStock ?? 0}'),
+                                onTap: () {
+                                  Modular.to.pushNamed('/products/${product.id}/');
+                                },
+                              ),
+                            )
+                            .toList() ??
+                        [],
+                  ),
+                )
+              else
                 SliverToBoxAdapter(
-                  child: CustomScrollView(
-                    shrinkWrap: true,
-                    slivers: [
-                      SliverList(
-                        delegate: SliverChildListDelegate(
-                          state.products
-                                  ?.map(
-                                    (product) => ListTile(
-                                      title: Text(product.description ?? ''),
-                                      subtitle: Text('Em estoque: ${product.quantityInStock ?? 0}'),
-                                      onTap: () {
-                                        Modular.to.pushNamed('/products/${product.id}/');
-                                      },
-                                    ),
-                                  )
-                                  .toList() ??
-                              [],
-                        ),
-                      ),
-                    ],
+                  child: Center(
+                    child: Text('Ainda não existem produtos cadastrados.'),
                   ),
                 ),
-              ],
-            ),
+            ],
           );
         },
         onError: (context, error) => Center(

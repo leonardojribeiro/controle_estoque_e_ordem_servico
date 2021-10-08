@@ -21,35 +21,49 @@ class _ProductBrandsPageState extends ModularState<ProductBrandsPage, ProductBra
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Marcas de produto'),
-      ),
-      body: ScopedBuilder<ProductBrandStore, ErrorDescription, ProductBrandState>(
-        store: store,
+      body: ScopedBuilder<ProductBrandStore, ErrorDescription, ProductBrandState>.transition(
+        transition: (context, child) => AnimatedSwitcher(
+          duration: Duration(milliseconds: 400),
+          child: child,
+        ),
         onLoading: (context) => Center(
           child: CircularProgressIndicator(),
         ),
         onState: (context, state) {
-          if (state.products?.isEmpty == true) {
-            return Center(
-              child: Text('Nenhum tipo de produto encontrado.'),
-            );
-          }
           return CustomScrollView(
             scrollBehavior: CupertinoScrollBehavior(),
             slivers: [
-              SliverList(
-                delegate: SliverChildListDelegate(
-                  state.products
-                          ?.map(
-                            (e) => ListTile(
-                              title: Text(e.description ?? ''),
-                            ),
-                          )
-                          .toList() ??
-                      [],
+              SliverAppBar(
+                onStretchTrigger: () async {
+                  store.findAll();
+                },
+                stretch: true,
+                flexibleSpace: FlexibleSpaceBar(
+                  stretchModes: [StretchMode.fadeTitle],
+                  centerTitle: false,
+                  title: Text('Marcas de produto'),
                 ),
-              )
+                expandedHeight: 150,
+              ),
+              if (state.productBrands?.isNotEmpty == true)
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                    state.productBrands
+                            ?.map(
+                              (e) => ListTile(
+                                title: Text(e.description ?? ''),
+                              ),
+                            )
+                            .toList() ??
+                        [],
+                  ),
+                )
+              else
+                SliverToBoxAdapter(
+                  child: Center(
+                    child: Text('Ainda não existem marcas de produto cadastradas.'),
+                  ),
+                ),
             ],
           );
         },

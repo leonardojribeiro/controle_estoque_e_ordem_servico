@@ -11,7 +11,7 @@ class ProductTypeRepository {
     return [];
   }
 
-  Future<dynamic> createProduct({required String description}) async {
+  Future<dynamic> create({required String description}) async {
     return Modular.get<ApiService>().post(
       url: 'product_types',
       data: {

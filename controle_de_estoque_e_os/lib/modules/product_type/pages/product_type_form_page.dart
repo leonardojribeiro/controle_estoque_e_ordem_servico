@@ -30,11 +30,11 @@ class _ProductTypeFormPageState extends ModularState<ProductTypeFormPage, Produc
               ),
               OutlinedButton(
                 onPressed: () async {
-                  if (await store.createProductType(description: descriptionController.text)) {
+                  if (await store.create(description: descriptionController.text)) {
                     Modular.to.pop();
                   }
                 },
-                child: Text('Salvar'),
+                child: Text('Adicionar'),
               ),
             ],
           ),

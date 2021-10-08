@@ -1,17 +1,17 @@
-import 'package:controle_de_estoque_e_os/modules/product_type/product_type_store.dart';
+import 'package:controle_de_estoque_e_os/modules/client/client_store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 
-class ProductTypesPage extends StatefulWidget {
-  const ProductTypesPage({Key? key}) : super(key: key);
+class ClientsPage extends StatefulWidget {
+  const ClientsPage({Key? key}) : super(key: key);
 
   @override
-  _ProductTypesPageState createState() => _ProductTypesPageState();
+  _ClientsPageState createState() => _ClientsPageState();
 }
 
-class _ProductTypesPageState extends ModularState<ProductTypesPage, ProductTypeStore> {
+class _ClientsPageState extends ModularState<ClientsPage, ClientStore> {
   @override
   void initState() {
     store.findAll();
@@ -21,7 +21,7 @@ class _ProductTypesPageState extends ModularState<ProductTypesPage, ProductTypeS
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ScopedBuilder<ProductTypeStore, ErrorDescription, ProductTypeState>.transition(
+      body: ScopedBuilder<ClientStore, ErrorDescription, ClientState>.transition(
         transition: (context, child) => AnimatedSwitcher(
           duration: Duration(milliseconds: 400),
           child: child,
@@ -41,17 +41,17 @@ class _ProductTypesPageState extends ModularState<ProductTypesPage, ProductTypeS
                 flexibleSpace: FlexibleSpaceBar(
                   stretchModes: [StretchMode.fadeTitle],
                   centerTitle: false,
-                  title: Text('Tipos de produto'),
+                  title: Text('Clientes'),
                 ),
                 expandedHeight: 150,
               ),
-              if (state.productTypes?.isNotEmpty == true)
+              if (state.products?.isNotEmpty == true)
                 SliverList(
                   delegate: SliverChildListDelegate(
-                    state.productTypes
+                    state.products
                             ?.map(
                               (e) => ListTile(
-                                title: Text(e.description ?? ''),
+                                title: Text(e.fullName ?? ''),
                               ),
                             )
                             .toList() ??
@@ -61,7 +61,7 @@ class _ProductTypesPageState extends ModularState<ProductTypesPage, ProductTypeS
               else
                 SliverToBoxAdapter(
                   child: Center(
-                    child: Text('Ainda não existem tipos de produto cadastrados.'),
+                    child: Text('Ainda não existem clientes cadastrados.'),
                   ),
                 ),
             ],
@@ -73,7 +73,7 @@ class _ProductTypesPageState extends ModularState<ProductTypesPage, ProductTypeS
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Modular.to.pushNamed('/product_types/add/');
+          Modular.to.pushNamed('/clients/add/');
         },
         child: Icon(Icons.add),
       ),

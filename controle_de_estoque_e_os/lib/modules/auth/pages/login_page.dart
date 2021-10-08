@@ -52,117 +52,129 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 360),
-          child: CustomScrollView(
-            scrollBehavior: CupertinoScrollBehavior(),
-            slivers: [
-              SliverAppBar(
-                expandedHeight: 150,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Text('Login'),
-                ),
-              ),
-              SliverToBoxAdapter(
-                child: Card(
-                  margin: EdgeInsets.zero,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Olá!',
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'Para organizar seu estoque é você precisa estar identificado.',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                          textAlign: TextAlign.justify,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FlutterTextField.email(
-                          controller: emailController,
-                          labelText: 'Email',
-                          required: true,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FlutterTextField.senha(
-                          controller: passwordController,
-                          labelText: 'Senha',
-                          validator: (password) => (password?.length ?? 0) >= 6 == true ? null : 'A senha deve ter pelo menos 6 caracteres',
-                          nextFocus: loginButtonFocus,
-                        ),
-                      ),
-                      ValueListenableBuilder<String?>(
-                        valueListenable: errorNotifier,
-                        builder: (context, error, child) {
-                          if (error != null) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Center(
-                                child: Text(
-                                  error,
-                                  style: TextStyle(color: Theme.of(context).errorColor),
-                                ),
-                              ),
-                            );
-                          }
-                          return Container();
-                        },
-                      ),
-                      Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: OutlinedButton(
-                            focusNode: loginButtonFocus,
-                            onPressed: signIn,
-                            child: Text('Login'),
-                          ),
-                        ),
-                      ),
-                      Divider(),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text.rich(
-                          TextSpan(
-                            text: 'Não tem um login? ',
-                            children: [
-                              TextSpan(
-                                text: 'Cadastre-se',
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () async {
-                                    final signed = await Modular.to.pushNamed('/sign_up/');
-                                    if (signed == true) {
-                                      Modular.to.pop(true);
-                                    }
-                                  },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+      body: CustomScrollView(
+        scrollBehavior: CupertinoScrollBehavior(),
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 150,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text('Login'),
+            ),
+            stretch: true,
           ),
-        ),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height - 150,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Olá!',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Para organizar seu estoque é você precisa estar identificado.',
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                            textAlign: TextAlign.justify,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FlutterTextField.email(
+                            controller: emailController,
+                            labelText: 'Email',
+                            required: true,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FlutterTextField.senha(
+                            controller: passwordController,
+                            labelText: 'Senha',
+                            validator: (password) => (password?.length ?? 0) >= 6 == true ? null : 'A senha deve ter pelo menos 6 caracteres',
+                            nextFocus: loginButtonFocus,
+                          ),
+                        ),
+                        ValueListenableBuilder<String?>(
+                          valueListenable: errorNotifier,
+                          builder: (context, error, child) {
+                            if (error != null) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Text(
+                                    error,
+                                    style: TextStyle(color: Theme.of(context).errorColor),
+                                  ),
+                                ),
+                              );
+                            }
+                            return Container();
+                          },
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: OutlinedButton(
+                              focusNode: loginButtonFocus,
+                              onPressed: signIn,
+                              child: Text('Login'),
+                            ),
+                          ),
+                        ),
+                        Divider(),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text.rich(
+                            TextSpan(
+                              text: 'Não tem um login? ',
+                              children: [
+                                TextSpan(
+                                  text: 'Cadastre-se',
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () async {
+                                      final signed = await Modular.to.pushNamed('/sign_up/');
+                                      if (signed == true) {
+                                        Modular.to.pop(true);
+                                      }
+                                    },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

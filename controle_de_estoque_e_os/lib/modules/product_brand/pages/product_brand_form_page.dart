@@ -34,13 +34,13 @@ class _ProductBrandFormPageState extends ModularState<ProductBrandFormPage, Prod
                 child: Center(
                   child: OutlinedButton(
                     onPressed: () async {
-                      if (await store.createProductBrand(
+                      if (await store.create(
                         description: descriptionController.text,
                       )) {
                         Modular.to.pop();
                       }
                     },
-                    child: Text('Adicionar Marca'),
+                    child: Text('Adicionar'),
                   ),
                 ),
               ),
