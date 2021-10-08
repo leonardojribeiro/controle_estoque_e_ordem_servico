@@ -42,6 +42,12 @@ class _HomePageSignedState extends State<HomePageSigned> {
             },
             child: Text('Sair'),
           ),
+          OutlinedButton(
+            onPressed: () async {
+              print(await Modular.get<AuthController>().getToken());
+            },
+            child: Text('printar token'),
+          ),
         ],
       ),
     );

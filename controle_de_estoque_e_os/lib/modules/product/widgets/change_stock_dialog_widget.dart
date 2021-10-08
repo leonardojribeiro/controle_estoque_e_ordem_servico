@@ -44,6 +44,7 @@ class _ChangeStockDialogWidgetState extends ModularState<ChangeStockDialogWidget
         children: [
           Text(subtitleText),
           FlutterTextField.numero(
+            autoFocus: true,
             controller: quantityController,
             labelText: 'Quantidade de produtos',
           ),

@@ -1,6 +1,7 @@
 import 'package:controle_de_estoque_e_os/modules/auth/auth_controller.dart';
 import 'package:controle_de_estoque_e_os/modules/establishiment/establishiment_store.dart';
 import 'package:controle_de_estoque_e_os/shared/models/establishiment_model.dart';
+import 'package:controle_de_estoque_e_os/shared/widgets/card_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -76,167 +77,159 @@ class _SignUpPageState extends ModularState<SignUpPage, EstablishimentStore> {
       appBar: AppBar(
         title: Text('Criar conta'),
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 360),
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: CardWidget(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 300,
+              child: PageView(
+                controller: pageController,
+                physics: NeverScrollableScrollPhysics(),
                 children: [
-                  SizedBox(
-                    height: 300,
-                    child: PageView(
-                      controller: pageController,
-                      physics: NeverScrollableScrollPhysics(),
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Olá! Para criar uma conta, informe o nome fantasia de sua empresa.',
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                      Form(
+                        key: firstFormKey,
+                        child: FlutterTextField(
+                          controller: displayNameController,
+                          labelText: 'Nome Fantasia',
+                          nextFocus: nextButtonFocus,
+                          validator: (displayName) => displayName?.isEmpty == true ? 'Informe o nome fantasia' : null,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(
-                              'Olá! Para criar uma conta, informe o nome fantasia de sua empresa.',
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                            Form(
-                              key: firstFormKey,
-                              child: FlutterTextField(
-                                controller: displayNameController,
-                                labelText: 'Nome Fantasia',
-                                nextFocus: nextButtonFocus,
-                                validator: (displayName) => displayName?.isEmpty == true ? 'Informe o nome fantasia' : null,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  OutlinedButton(
-                                    focusNode: nextButtonFocus,
-                                    onPressed: () {
-                                      if (firstFormKey.currentState?.validate() == true) {
-                                        pageController.nextPage(duration: const Duration(milliseconds: 350), curve: Curves.ease);
-                                      }
-                                    },
-                                    child: Text('Próximo'),
-                                  ),
-                                ],
-                              ),
+                            OutlinedButton(
+                              focusNode: nextButtonFocus,
+                              onPressed: () {
+                                if (firstFormKey.currentState?.validate() == true) {
+                                  pageController.nextPage(duration: const Duration(milliseconds: 350), curve: Curves.ease);
+                                }
+                              },
+                              child: Text('Próximo'),
                             ),
                           ],
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Agora, crie o seu usuário.',
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                      Form(
+                        key: secondFormKey,
+                        child: Column(
                           children: [
-                            Text(
-                              'Agora, crie o seu usuário.',
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
+                            FlutterTextField.email(
+                              controller: emailController,
+                              labelText: 'Email',
+                              required: true,
                             ),
-                            Form(
-                              key: secondFormKey,
-                              child: Column(
-                                children: [
-                                  FlutterTextField.email(
-                                    controller: emailController,
-                                    labelText: 'Email',
-                                    required: true,
-                                  ),
-                                  FlutterTextField.senha(
-                                    controller: passwordController,
-                                    labelText: 'Senha',
-                                    nextFocus: confirmPasswordFocus,
-                                    required: true,
-                                    validator: (password) => (password?.length ?? 0) >= 6 == true ? null : 'A senha deve ter pelo menos 6 caracteres',
-                                  ),
-                                  FlutterTextField.senha(
-                                    controller: confirmPasswordController,
-                                    focusNode: confirmPasswordFocus,
-                                    nextFocus: createButtonFocus,
-                                    labelText: 'Confirme sua Senha',
-                                    required: true,
-                                    validator: (password) {
-                                      if (password != passwordController.text) {
-                                        return 'As senhas não conferem';
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
+                            FlutterTextField.senha(
+                              controller: passwordController,
+                              labelText: 'Senha',
+                              nextFocus: confirmPasswordFocus,
+                              required: true,
+                              validator: (password) => (password?.length ?? 0) >= 6 == true ? null : 'A senha deve ter pelo menos 6 caracteres',
                             ),
-                            ValueListenableBuilder<String?>(
-                              valueListenable: errorNotifier,
-                              builder: (context, error, child) {
-                                if (error != null) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Center(
-                                      child: Text(
-                                        error,
-                                        style: TextStyle(color: Theme.of(context).errorColor),
-                                      ),
-                                    ),
-                                  );
+                            FlutterTextField.senha(
+                              controller: confirmPasswordController,
+                              focusNode: confirmPasswordFocus,
+                              nextFocus: createButtonFocus,
+                              labelText: 'Confirme sua Senha',
+                              required: true,
+                              validator: (password) {
+                                if (password != passwordController.text) {
+                                  return 'As senhas não conferem';
                                 }
-                                return Container();
                               },
                             ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  OutlinedButton(
-                                    onPressed: () {
-                                      pageController.previousPage(duration: const Duration(milliseconds: 350), curve: Curves.ease);
-                                    },
-                                    child: Text('Voltar'),
-                                  ),
-                                  OutlinedButton(
-                                    focusNode: createButtonFocus,
-                                    onPressed: signUp,
-                                    child: Text('Criar Conta'),
-                                  ),
-                                ],
+                          ],
+                        ),
+                      ),
+                      ValueListenableBuilder<String?>(
+                        valueListenable: errorNotifier,
+                        builder: (context, error, child) {
+                          if (error != null) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: Text(
+                                  error,
+                                  style: TextStyle(color: Theme.of(context).errorColor),
+                                ),
                               ),
+                            );
+                          }
+                          return Container();
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            OutlinedButton(
+                              onPressed: () {
+                                pageController.previousPage(duration: const Duration(milliseconds: 350), curve: Curves.ease);
+                              },
+                              child: Text('Voltar'),
+                            ),
+                            OutlinedButton(
+                              focusNode: createButtonFocus,
+                              onPressed: signUp,
+                              child: Text('Criar Conta'),
                             ),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                  Divider(),
-                  Text.rich(
-                    TextSpan(
-                      text: 'Já tem uma conta? ',
-                      children: [
-                        TextSpan(
-                          text: 'Faça login',
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () async {
-                              final login = await Modular.to.pushNamed('/login/');
-                              if (login == true) {
-                                Modular.to.pop(true);
-                              }
-                            },
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-          ),
+            Divider(),
+            Text.rich(
+              TextSpan(
+                text: 'Já tem uma conta? ',
+                children: [
+                  TextSpan(
+                    text: 'Faça login',
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () async {
+                        final login = await Modular.to.pushNamed('/login/');
+                        if (login == true) {
+                          Modular.to.pop(true);
+                        }
+                      },
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

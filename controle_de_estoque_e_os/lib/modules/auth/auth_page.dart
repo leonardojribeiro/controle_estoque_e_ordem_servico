@@ -16,6 +16,11 @@ class _AuthPageState extends State<AuthPage> {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.userChanges(),
       builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
         print('user -> ${snapshot.data}');
         if (snapshot.data == null) {
           return HomePage();

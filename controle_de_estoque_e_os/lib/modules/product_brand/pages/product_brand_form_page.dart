@@ -1,4 +1,5 @@
 import 'package:controle_de_estoque_e_os/modules/product_brand/product_brand_store.dart';
+import 'package:controle_de_estoque_e_os/shared/widgets/card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -19,23 +20,32 @@ class _ProductBrandFormPageState extends ModularState<ProductBrandFormPage, Prod
         title: Text('Adicionar Marca de produto'),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            TextFormField(
-              controller: descriptionController,
-              decoration: InputDecoration(labelText: 'Descrição'),
-            ),
-            OutlinedButton(
-              onPressed: () async {
-                if (await store.createProductBrand(
-                  description: descriptionController.text,
-                )) {
-                  Modular.to.pop();
-                }
-              },
-              child: Text('Salvar'),
-            ),
-          ],
+        child: CardWidget(
+          child: Column(
+            children: [
+              TextFormField(
+                autofocus: true,
+                controller: descriptionController,
+                decoration: InputDecoration(labelText: 'Descrição'),
+              ),
+              Divider(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: OutlinedButton(
+                    onPressed: () async {
+                      if (await store.createProductBrand(
+                        description: descriptionController.text,
+                      )) {
+                        Modular.to.pop();
+                      }
+                    },
+                    child: Text('Adicionar Marca'),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

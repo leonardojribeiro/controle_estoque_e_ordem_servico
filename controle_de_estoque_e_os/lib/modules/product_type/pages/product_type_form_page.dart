@@ -1,4 +1,5 @@
 import 'package:controle_de_estoque_e_os/modules/product_type/product_type_store.dart';
+import 'package:controle_de_estoque_e_os/shared/widgets/card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -9,8 +10,7 @@ class ProductTypeFormPage extends StatefulWidget {
   _ProductTypeFormPageState createState() => _ProductTypeFormPageState();
 }
 
-class _ProductTypeFormPageState
-    extends ModularState<ProductTypeFormPage, ProductTypeStore> {
+class _ProductTypeFormPageState extends ModularState<ProductTypeFormPage, ProductTypeStore> {
   final descriptionController = TextEditingController();
 
   @override
@@ -20,22 +20,24 @@ class _ProductTypeFormPageState
         title: Text('Adicionar tipo de produto'),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            TextFormField(
-              controller: descriptionController,
-              decoration: InputDecoration(labelText: 'Descrição'),
-            ),
-            OutlinedButton(
-              onPressed: () async {
-                if (await store.createProductType(
-                    description: descriptionController.text)) {
-                  Modular.to.pop();
-                }
-              },
-              child: Text('Salvar'),
-            ),
-          ],
+        child: CardWidget(
+          child: Column(
+            children: [
+              TextFormField(
+                autofocus: true,
+                controller: descriptionController,
+                decoration: InputDecoration(labelText: 'Descrição'),
+              ),
+              OutlinedButton(
+                onPressed: () async {
+                  if (await store.createProductType(description: descriptionController.text)) {
+                    Modular.to.pop();
+                  }
+                },
+                child: Text('Salvar'),
+              ),
+            ],
+          ),
         ),
       ),
     );

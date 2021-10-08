@@ -1,4 +1,5 @@
 import 'package:controle_de_estoque_e_os/modules/product/product_store.dart';
+import 'package:controle_de_estoque_e_os/shared/widgets/card_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -35,26 +36,35 @@ class _ProductsPageState extends ModularState<ProductsPage, ProductStore> {
               child: Text('Nenhum produto encontrado.'),
             );
           }
-          return CustomScrollView(
-            scrollBehavior: CupertinoScrollBehavior(),
-            slivers: [
-              SliverList(
-                delegate: SliverChildListDelegate(
-                  state.products
-                          ?.map(
-                            (product) => ListTile(
-                              title: Text(product.description ?? ''),
-                              subtitle: Text('Em estoque: ${product.quantityInStock ?? 0}'),
-                              onTap: () {
-                                Modular.to.pushNamed('/products/${product.id}/');
-                              },
-                            ),
-                          )
-                          .toList() ??
-                      [],
+          return CardWidget(
+            child: CustomScrollView(
+              scrollBehavior: CupertinoScrollBehavior(),
+              slivers: [
+                SliverToBoxAdapter(
+                  child: CustomScrollView(
+                    shrinkWrap: true,
+                    slivers: [
+                      SliverList(
+                        delegate: SliverChildListDelegate(
+                          state.products
+                                  ?.map(
+                                    (product) => ListTile(
+                                      title: Text(product.description ?? ''),
+                                      subtitle: Text('Em estoque: ${product.quantityInStock ?? 0}'),
+                                      onTap: () {
+                                        Modular.to.pushNamed('/products/${product.id}/');
+                                      },
+                                    ),
+                                  )
+                                  .toList() ??
+                              [],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
         onError: (context, error) => Center(
