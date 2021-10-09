@@ -1,4 +1,5 @@
 import 'package:controle_de_estoque_e_os/modules/client/client_store.dart';
+import 'package:controle_de_estoque_e_os/services/api_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -18,18 +19,22 @@ class _ClientsPageState extends ModularState<ClientsPage, ClientStore> {
     super.initState();
   }
 
+  bool firstRenderFired = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ScopedBuilder<ClientStore, ErrorDescription, ClientState>.transition(
-        transition: (context, child) => AnimatedSwitcher(
-          duration: Duration(milliseconds: 400),
-          child: child,
-        ),
+      body: ScopedBuilder<ClientStore, ApiError, ClientState>.transition(
         onLoading: (context) => Center(
           child: CircularProgressIndicator(),
         ),
         onState: (context, state) {
+          if (!firstRenderFired) {
+            firstRenderFired = true;
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           return CustomScrollView(
             scrollBehavior: CupertinoScrollBehavior(),
             slivers: [
@@ -52,6 +57,9 @@ class _ClientsPageState extends ModularState<ClientsPage, ClientStore> {
                             ?.map(
                               (e) => ListTile(
                                 title: Text(e.fullName ?? ''),
+                                onTap: () {
+                                  Modular.to.pushNamed('/clients/${e.id}/');
+                                },
                               ),
                             )
                             .toList() ??

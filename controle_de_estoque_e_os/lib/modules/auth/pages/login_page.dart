@@ -84,7 +84,7 @@ class _LoginPageState extends State<LoginPage> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Para organizar seu estoque é você precisa estar identificado.',
+                            'Para organizar seu estoque, você precisa estar identificado.',
                             style: TextStyle(
                               fontSize: 16,
                             ),
@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                                 TextSpan(
                                   text: 'Cadastre-se',
                                   style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
+                                    color: Theme.of(context).textTheme.button?.color,
                                   ),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () async {

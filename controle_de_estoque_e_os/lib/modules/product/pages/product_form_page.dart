@@ -1,3 +1,4 @@
+import 'package:controle_de_estoque_e_os/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_text_field/flutter_text_field.dart';
@@ -42,7 +43,7 @@ class _ProductFormPageState extends ModularState<ProductFormPage, ProductStore> 
       appBar: AppBar(
         title: Text(widget.productId != null ? 'Editar Produto' : 'Adicionar Produto'),
       ),
-      body: ScopedBuilder<ProductStore, ErrorDescription, ProductState>(
+      body: ScopedBuilder<ProductStore, ApiError, ProductState>(
         store: store,
         onLoading: (context) => Center(
           child: CircularProgressIndicator(),

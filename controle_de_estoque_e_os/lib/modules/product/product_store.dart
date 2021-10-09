@@ -1,19 +1,18 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_triple/flutter_triple.dart';
-
+import 'package:controle_de_estoque_e_os/services/api_service.dart';
 import 'package:controle_de_estoque_e_os/modules/product/product_repository.dart';
 import 'package:controle_de_estoque_e_os/modules/product_brand/product_brand_repository.dart';
 import 'package:controle_de_estoque_e_os/modules/product_type/product_type_repository.dart';
 import 'package:controle_de_estoque_e_os/shared/models/product_brand_model.dart';
 import 'package:controle_de_estoque_e_os/shared/models/product_model.dart';
 import 'package:controle_de_estoque_e_os/shared/models/product_type_model.dart';
+import 'package:flutter_triple/flutter_triple.dart';
 
-class ProductStore extends NotifierStore<ErrorDescription, ProductState> {
+class ProductStore extends NotifierStore<ApiError, ProductState> {
   ProductStore({
     required this.repository,
     required this.productTypeRepository,
     required this.productBrandRepository,
-  }) : super(ProductState(products: []));
+  }) : super(ProductState());
 
   final ProductRepository repository;
   final ProductTypeRepository productTypeRepository;

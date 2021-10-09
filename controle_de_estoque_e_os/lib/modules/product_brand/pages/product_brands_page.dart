@@ -1,4 +1,5 @@
 import 'package:controle_de_estoque_e_os/modules/product_brand/product_brand_store.dart';
+import 'package:controle_de_estoque_e_os/services/api_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -18,18 +19,22 @@ class _ProductBrandsPageState extends ModularState<ProductBrandsPage, ProductBra
     super.initState();
   }
 
+  bool firstRenderFired = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ScopedBuilder<ProductBrandStore, ErrorDescription, ProductBrandState>.transition(
-        transition: (context, child) => AnimatedSwitcher(
-          duration: Duration(milliseconds: 400),
-          child: child,
-        ),
+      body: ScopedBuilder<ProductBrandStore, ApiError, ProductBrandState>.transition(
         onLoading: (context) => Center(
           child: CircularProgressIndicator(),
         ),
         onState: (context, state) {
+          if (!firstRenderFired) {
+            firstRenderFired = true;
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           return CustomScrollView(
             scrollBehavior: CupertinoScrollBehavior(),
             slivers: [

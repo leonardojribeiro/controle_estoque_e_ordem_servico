@@ -260,7 +260,7 @@ class _SignUpPageState extends ModularState<SignUpPage, EstablishimentStore> {
                             TextSpan(
                               text: 'Faça login',
                               style: TextStyle(
-                                color: Theme.of(context).primaryColor,
+                                color: Theme.of(context).textTheme.button?.color,
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () async {

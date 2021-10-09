@@ -12,10 +12,18 @@ class _AppWidgetState extends State<AppWidget> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Controle de Estoque e OS',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      debugShowCheckedModeBanner: false,
+      builder: (context, child) {
+        final brightness = MediaQuery.of(context).platformBrightness;
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Controle de Estoque e OS',
+          theme: ThemeData(
+            brightness: brightness,
+            primarySwatch: Colors.blue,
+          ),
+        ).modular();
+      },
     ).modular();
   }
 }

@@ -17,4 +17,14 @@ class ClientRepository {
       data: client.toMap(),
     );
   }
+
+  Future<ClientModel?> findById({required String id}) async {
+    final client = await Modular.get<ApiService>().get(
+      url: 'clients/$id',
+    );
+    print(client);
+    if (client != null) {
+      return ClientModel.fromMap(client);
+    }
+  }
 }

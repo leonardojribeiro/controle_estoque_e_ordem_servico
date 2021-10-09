@@ -1,9 +1,9 @@
 import 'package:controle_de_estoque_e_os/modules/product_type/product_type_repository.dart';
+import 'package:controle_de_estoque_e_os/services/api_service.dart';
 import 'package:controle_de_estoque_e_os/shared/models/product_type_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 
-class ProductTypeStore extends NotifierStore<ErrorDescription, ProductTypeState> {
+class ProductTypeStore extends NotifierStore<ApiError, ProductTypeState> {
   ProductTypeStore({required this.repository}) : super(ProductTypeState(productTypes: []));
 
   final ProductTypeRepository repository;
