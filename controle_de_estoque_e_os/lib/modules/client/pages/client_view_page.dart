@@ -1,4 +1,5 @@
 import 'package:controle_de_estoque_e_os/services/api_service.dart';
+import 'package:controle_de_estoque_e_os/shared/widgets/scroll_view_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -31,23 +32,15 @@ class _ClientViewPageState extends ModularState<ClientViewPage, ClientStore> {
           child: CircularProgressIndicator(),
         ),
         onState: (context, state) {
-          return Scaffold(
-            body: CustomScrollView(
-              scrollBehavior: CupertinoScrollBehavior(),
-              slivers: [
-                SliverAppBar(
-                  onStretchTrigger: () async {
-                    store.findById(id: widget.clientId ?? '');
-                  },
-                  stretch: true,
-                  flexibleSpace: FlexibleSpaceBar(
-                    stretchModes: [StretchMode.fadeTitle],
-                    centerTitle: false,
-                    title: Text(state.client?.fullName ?? ''),
-                  ),
-                  expandedHeight: 150,
-                ),
-              ],
+          return ScrollViewWidget(
+            appBarTitle: state.client?.fullName ?? '',
+            onStretchTrigger: () => store.findById(id: widget.clientId ?? ''),
+            slivers: [],
+            floatingActionButton: FloatingActionButton(
+              heroTag: '/clients/${widget.clientId}/update/',
+              onPressed: () {
+                Modular.to.pushNamed('/clients/${widget.clientId}/update/');
+              },
             ),
           );
         },

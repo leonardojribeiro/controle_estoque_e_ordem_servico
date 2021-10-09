@@ -16,8 +16,9 @@ class ClientModule extends Module {
 
   @override
   List<ModularRoute> get routes => [
-        ChildRoute('/add/', child: (context, args) => ClientFormPage()),
         ChildRoute('/', child: (context, args) => ClientsPage()),
+        ChildRoute('/add/', child: (context, args) => ClientFormPage()),
         ChildRoute('/:id/', child: (context, args) => ClientViewPage(clientId: args.params['id'])),
+        ChildRoute('/:id/update/', child: (context, args) => ClientFormPage(clientId: args.params['id'])),
       ];
 }

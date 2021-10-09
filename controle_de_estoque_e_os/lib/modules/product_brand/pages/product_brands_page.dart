@@ -1,5 +1,6 @@
 import 'package:controle_de_estoque_e_os/modules/product_brand/product_brand_store.dart';
 import 'package:controle_de_estoque_e_os/services/api_service.dart';
+import 'package:controle_de_estoque_e_os/shared/widgets/scroll_view_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -35,21 +36,10 @@ class _ProductBrandsPageState extends ModularState<ProductBrandsPage, ProductBra
               child: CircularProgressIndicator(),
             );
           }
-          return CustomScrollView(
-            scrollBehavior: CupertinoScrollBehavior(),
+          return ScrollViewWidget(
+            appBarTitle: 'Marcas de produto',
+            onStretchTrigger: store.findAll,
             slivers: [
-              SliverAppBar(
-                onStretchTrigger: () async {
-                  store.findAll();
-                },
-                stretch: true,
-                flexibleSpace: FlexibleSpaceBar(
-                  stretchModes: [StretchMode.fadeTitle],
-                  centerTitle: false,
-                  title: Text('Marcas de produto'),
-                ),
-                expandedHeight: 150,
-              ),
               if (state.productBrands?.isNotEmpty == true)
                 SliverList(
                   delegate: SliverChildListDelegate(

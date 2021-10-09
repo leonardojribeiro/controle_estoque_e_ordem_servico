@@ -1,5 +1,6 @@
 import 'package:controle_de_estoque_e_os/modules/product/product_store.dart';
 import 'package:controle_de_estoque_e_os/services/api_service.dart';
+import 'package:controle_de_estoque_e_os/shared/widgets/scroll_view_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -34,21 +35,10 @@ class _ProductsPageState extends ModularState<ProductsPage, ProductStore> {
               child: CircularProgressIndicator(),
             );
           }
-          return CustomScrollView(
-            scrollBehavior: CupertinoScrollBehavior(),
+          return ScrollViewWidget(
+            appBarTitle: 'Estoque',
+            onStretchTrigger: store.findAll,
             slivers: [
-              SliverAppBar(
-                onStretchTrigger: () async {
-                  store.findAll();
-                },
-                stretch: true,
-                flexibleSpace: FlexibleSpaceBar(
-                  stretchModes: [StretchMode.fadeTitle],
-                  centerTitle: false,
-                  title: Text('Produtos'),
-                ),
-                expandedHeight: 150,
-              ),
               if (state.products?.isNotEmpty == true)
                 SliverList(
                   delegate: SliverChildListDelegate(
@@ -69,7 +59,7 @@ class _ProductsPageState extends ModularState<ProductsPage, ProductStore> {
               else
                 SliverToBoxAdapter(
                   child: Center(
-                    child: Text('Ainda não existem produtos cadastrados.'),
+                    child: Text('Ainda não existem produtos cadastrados no estoque.'),
                   ),
                 ),
             ],

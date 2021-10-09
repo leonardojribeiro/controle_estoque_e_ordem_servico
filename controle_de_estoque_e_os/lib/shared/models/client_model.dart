@@ -46,12 +46,12 @@ class ClientModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'cpf': cpf,
-      'fullName': fullName,
-      'telephone': telephone,
-      'whatsapp': whatsapp,
-      'fullAddress': fullAddress,
+      if (id != null) 'id': id,
+      if (fullName != null) 'cpf': cpf,
+      if (fullName != null) 'fullName': fullName,
+      if (telephone != null) 'telephone': telephone,
+      if (whatsapp != null) 'whatsapp': whatsapp,
+      if (fullAddress != null) 'fullAddress': fullAddress,
     };
   }
 

@@ -1,5 +1,6 @@
 import 'package:controle_de_estoque_e_os/modules/product_type/product_type_store.dart';
 import 'package:controle_de_estoque_e_os/shared/widgets/card_widget.dart';
+import 'package:controle_de_estoque_e_os/shared/widgets/scroll_view_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -15,12 +16,10 @@ class _ProductTypeFormPageState extends ModularState<ProductTypeFormPage, Produc
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Adicionar tipo de produto'),
-      ),
-      body: SingleChildScrollView(
-        child: CardWidget(
+    return ScrollViewWidget(
+      appBarTitle: 'Adicionar tipo de produto',
+      slivers: [
+        SliverToBoxAdapter(
           child: Column(
             children: [
               TextFormField(
@@ -39,7 +38,7 @@ class _ProductTypeFormPageState extends ModularState<ProductTypeFormPage, Produc
             ],
           ),
         ),
-      ),
+      ],
     );
   }
 }

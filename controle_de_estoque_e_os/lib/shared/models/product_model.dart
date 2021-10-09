@@ -79,17 +79,17 @@ class ProductModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'description': description,
-      'additionalInfo': additionalInfo,
-      'productType': productType?.toMap(),
-      'productBrand': productBrand?.toMap(),
-      'costPrice': costPrice,
-      'salePrice': salePrice,
-      'quantityInStock': quantityInStock,
-      'minimumQuantity': minimumQuantity,
-      'quantityIn': quantityIn,
-      'quantityOut': quantityOut,
+      if (id != null) 'id': id,
+      if (description != null) 'description': description,
+      if (additionalInfo != null) 'additionalInfo': additionalInfo,
+      if (productType != null) 'productType': productType?.toMap(),
+      if (productBrand != null) 'productBrand': productBrand?.toMap(),
+      if (costPrice != null) 'costPrice': costPrice,
+      if (salePrice != null) 'salePrice': salePrice,
+      if (quantityInStock != null) 'quantityInStock': quantityInStock,
+      if (minimumQuantity != null) 'minimumQuantity': minimumQuantity,
+      if (quantityIn != null) 'quantityIn': quantityIn,
+      if (quantityOut != null) 'quantityOut': quantityOut,
     };
   }
 }

@@ -1,5 +1,6 @@
 import 'package:controle_de_estoque_e_os/modules/client/client_store.dart';
 import 'package:controle_de_estoque_e_os/services/api_service.dart';
+import 'package:controle_de_estoque_e_os/shared/widgets/scroll_view_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -35,21 +36,10 @@ class _ClientsPageState extends ModularState<ClientsPage, ClientStore> {
               child: CircularProgressIndicator(),
             );
           }
-          return CustomScrollView(
-            scrollBehavior: CupertinoScrollBehavior(),
+          return ScrollViewWidget(
+            appBarTitle: 'Clientes',
+            onStretchTrigger: store.findAll,
             slivers: [
-              SliverAppBar(
-                onStretchTrigger: () async {
-                  store.findAll();
-                },
-                stretch: true,
-                flexibleSpace: FlexibleSpaceBar(
-                  stretchModes: [StretchMode.fadeTitle],
-                  centerTitle: false,
-                  title: Text('Clientes'),
-                ),
-                expandedHeight: 150,
-              ),
               if (state.products?.isNotEmpty == true)
                 SliverList(
                   delegate: SliverChildListDelegate(
