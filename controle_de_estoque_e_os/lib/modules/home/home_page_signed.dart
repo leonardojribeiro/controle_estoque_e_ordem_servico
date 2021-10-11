@@ -37,7 +37,7 @@ class _HomePageSignedState extends State<HomePageSigned> {
               onPressed: () {
                 Modular.to.pushNamed('/products/');
               },
-              child: Text('Produtos'),
+              child: Text('Estoque'),
             ),
             OutlinedButton(
               onPressed: () {

@@ -1,4 +1,3 @@
-import 'package:controle_de_estoque_e_os/shared/widgets/card_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -26,9 +25,6 @@ class _LoginPageState extends State<LoginPage> {
         email: emailController.text,
         password: passwordController.text,
       );
-      if (FirebaseAuth.instance.currentUser != null) {
-        Modular.to.pop(true);
-      }
     } on FirebaseAuthException catch (error) {
       switch (error.code) {
         case 'user-not-found':
@@ -156,11 +152,8 @@ class _LoginPageState extends State<LoginPage> {
                                     color: Theme.of(context).textTheme.button?.color,
                                   ),
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () async {
-                                      final signed = await Modular.to.pushNamed('/sign_up/');
-                                      if (signed == true) {
-                                        Modular.to.pop(true);
-                                      }
+                                    ..onTap = () {
+                                      Modular.to.pushNamed('/sign_up/');
                                     },
                                 ),
                               ],

@@ -1,6 +1,7 @@
 import 'package:controle_de_estoque_e_os/modules/product/product_store.dart';
 import 'package:controle_de_estoque_e_os/modules/product/widgets/change_stock_dialog_widget.dart';
 import 'package:controle_de_estoque_e_os/services/api_service.dart';
+import 'package:controle_de_estoque_e_os/shared/widgets/loading_widget.dart';
 import 'package:controle_de_estoque_e_os/shared/widgets/scroll_view_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,31 +22,24 @@ class ProductViewPage extends StatefulWidget {
 
 class _ProductViewPageState extends ModularState<ProductViewPage, ProductStore> {
   final moneyFormatter = NumberFormat('#,##0.00', 'pt_BR');
+  bool firstRenderFired = false;
+  final loading = LoadingWidget(loadingMessage: 'Carregando Produto');
+
   @override
   void initState() {
     store.findById(id: widget.productId ?? '');
     super.initState();
   }
 
-  bool firstRenderFired = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ScopedBuilder<ProductStore, ApiError, ProductState>.transition(
-        transition: (context, child) => AnimatedSwitcher(
-          duration: Duration(milliseconds: 400),
-          child: child,
-        ),
-        onLoading: (context) => Center(
-          child: CircularProgressIndicator(),
-        ),
+        onLoading: (context) => loading,
         onState: (context, state) {
           if (!firstRenderFired) {
             firstRenderFired = true;
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return loading;
           }
           return ScrollViewWidget(
             appBarTitle: state.product?.description ?? '',

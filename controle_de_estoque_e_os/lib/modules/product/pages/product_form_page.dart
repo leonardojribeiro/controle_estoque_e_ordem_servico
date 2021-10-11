@@ -1,4 +1,5 @@
 import 'package:controle_de_estoque_e_os/services/api_service.dart';
+import 'package:controle_de_estoque_e_os/shared/widgets/loading_widget.dart';
 import 'package:controle_de_estoque_e_os/shared/widgets/scroll_view_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ class _ProductFormPageState extends ModularState<ProductFormPage, ProductStore> 
   String productBrandId = '';
   bool firstRenderFired = false;
   final formKey = GlobalKey<FormState>();
+  final loading = LoadingWidget(loadingMessage: 'Carregando Formulário');
 
   @override
   void initState() {
@@ -79,15 +81,11 @@ class _ProductFormPageState extends ModularState<ProductFormPage, ProductStore> 
     return Scaffold(
       body: ScopedBuilder<ProductStore, ApiError, ProductState>.transition(
         store: store,
-        onLoading: (context) => Center(
-          child: CircularProgressIndicator(),
-        ),
+        onLoading: (context) => loading,
         onState: (context, state) {
           if (!firstRenderFired) {
             firstRenderFired = true;
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return loading;
           }
           if (state.product != null && widget.productId != null) {
             descriptionController.text = state.product?.description ?? '';

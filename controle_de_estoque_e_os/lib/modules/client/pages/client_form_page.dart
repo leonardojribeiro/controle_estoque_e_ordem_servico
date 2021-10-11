@@ -1,3 +1,4 @@
+import 'package:controle_de_estoque_e_os/shared/widgets/loading_widget.dart';
 import 'package:controle_de_estoque_e_os/shared/widgets/scroll_view_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,8 @@ class _ClientFormPageState extends ModularState<ClientFormPage, ClientStore> {
   final cpfController = FlutterTextEditingController();
   final fullAddressController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  bool firstRenderFired = false;
+  final loading = LoadingWidget(loadingMessage: 'Carregando Cliente');
 
   @override
   void initState() {
@@ -37,16 +40,14 @@ class _ClientFormPageState extends ModularState<ClientFormPage, ClientStore> {
   }
 
   @override
-  void dispose() {
-    print('disose');
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ScopedBuilder<ClientStore, ApiError, ClientState>(
         onState: (context, state) {
+          if (!firstRenderFired) {
+            firstRenderFired = true;
+            return loading;
+          }
           if (widget.clientId != null && state.client != null) {
             fullNameController.text = state.client?.fullName ?? '';
             fullAddressController.text = state.client?.fullAddress ?? '';

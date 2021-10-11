@@ -1,7 +1,6 @@
 import 'package:controle_de_estoque_e_os/modules/auth/auth_controller.dart';
 import 'package:controle_de_estoque_e_os/modules/establishiment/establishiment_store.dart';
 import 'package:controle_de_estoque_e_os/shared/models/establishiment_model.dart';
-import 'package:controle_de_estoque_e_os/shared/widgets/card_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';

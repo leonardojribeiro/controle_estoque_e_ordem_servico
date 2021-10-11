@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:controle_de_estoque_e_os/modules/auth/auth_controller.dart';
 import 'package:controle_de_estoque_e_os/modules/auth/auth_page.dart';
 import 'package:controle_de_estoque_e_os/modules/auth/pages/login_page.dart';
@@ -27,10 +29,18 @@ class AppModule extends Module {
   List<ModularRoute> get routes => [
         ChildRoute('/', child: (context, args) => AuthPage()),
         ChildRoute('/sign_up/', child: (context, args) => SignUpPage()),
-        ChildRoute('/login/', child: (context, args) => LoginPage()),
-        ModuleRoute('/product_types', module: ProductTypeModule()),
-        ModuleRoute('/product_brands', module: ProductBrandModule()),
-        ModuleRoute('/products', module: ProductModule()),
-        ModuleRoute('/clients', module: ClientModule()),
+        //ChildRoute('/login/', child: (context, args) => LoginPage()),
+        ModuleRoute('/product_types', module: ProductTypeModule(), guards: [LoginGuard()]),
+        ModuleRoute('/product_brands', module: ProductBrandModule(), guards: [LoginGuard()]),
+        ModuleRoute('/products', module: ProductModule(), guards: [LoginGuard()]),
+        ModuleRoute('/clients', module: ClientModule(), guards: [LoginGuard()]),
       ];
+}
+
+class LoginGuard extends RouteGuard {
+  LoginGuard() : super(redirectTo: '/');
+  @override
+  FutureOr<bool> canActivate(String path, ParallelRoute route) {
+    return Modular.get<AuthController>().auth.currentUser != null;
+  }
 }

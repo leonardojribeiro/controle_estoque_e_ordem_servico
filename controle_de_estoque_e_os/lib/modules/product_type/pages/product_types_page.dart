@@ -1,5 +1,6 @@
 import 'package:controle_de_estoque_e_os/modules/product_type/product_type_store.dart';
 import 'package:controle_de_estoque_e_os/services/api_service.dart';
+import 'package:controle_de_estoque_e_os/shared/widgets/loading_widget.dart';
 import 'package:controle_de_estoque_e_os/shared/widgets/scroll_view_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,19 +23,19 @@ class _ProductTypesPageState extends ModularState<ProductTypesPage, ProductTypeS
 
   bool firstRenderFired = false;
 
+  final loading = LoadingWidget(
+    loadingMessage: 'Carregando Tipos de Produto',
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ScopedBuilder<ProductTypeStore, ApiError, ProductTypeState>.transition(
-        onLoading: (context) => Center(
-          child: CircularProgressIndicator(),
-        ),
+        onLoading: (context) => loading,
         onState: (context, state) {
           if (!firstRenderFired) {
             firstRenderFired = true;
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return loading;
           }
           return ScrollViewWidget(
             appBarTitle: 'Tipos de produto',

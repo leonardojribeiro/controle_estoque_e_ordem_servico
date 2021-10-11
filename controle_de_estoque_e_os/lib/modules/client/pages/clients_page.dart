@@ -1,5 +1,6 @@
 import 'package:controle_de_estoque_e_os/modules/client/client_store.dart';
 import 'package:controle_de_estoque_e_os/services/api_service.dart';
+import 'package:controle_de_estoque_e_os/shared/widgets/loading_widget.dart';
 import 'package:controle_de_estoque_e_os/shared/widgets/scroll_view_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,27 +15,24 @@ class ClientsPage extends StatefulWidget {
 }
 
 class _ClientsPageState extends ModularState<ClientsPage, ClientStore> {
+  bool firstRenderFired = false;
+  final loading = LoadingWidget(loadingMessage: 'Carregando Clientes');
+
   @override
   void initState() {
     store.findAll();
     super.initState();
   }
 
-  bool firstRenderFired = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ScopedBuilder<ClientStore, ApiError, ClientState>.transition(
-        onLoading: (context) => Center(
-          child: CircularProgressIndicator(),
-        ),
+        onLoading: (context) => loading,
         onState: (context, state) {
           if (!firstRenderFired) {
             firstRenderFired = true;
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return loading;
           }
           return ScrollViewWidget(
             appBarTitle: 'Clientes',

@@ -1,4 +1,4 @@
-import 'package:controle_de_estoque_e_os/modules/home/home_page.dart';
+import 'package:controle_de_estoque_e_os/modules/auth/pages/login_page.dart';
 import 'package:controle_de_estoque_e_os/modules/home/home_page_signed.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ class _AuthPageState extends State<AuthPage> {
         }
         print('user -> ${snapshot.data}');
         if (snapshot.data == null) {
-          return HomePage();
+          return LoginPage();
         }
         return HomePageSigned();
       },

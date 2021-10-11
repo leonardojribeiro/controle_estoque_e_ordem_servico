@@ -1,5 +1,4 @@
 import 'package:controle_de_estoque_e_os/modules/product_brand/product_brand_store.dart';
-import 'package:controle_de_estoque_e_os/shared/widgets/card_widget.dart';
 import 'package:controle_de_estoque_e_os/shared/widgets/scroll_view_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
