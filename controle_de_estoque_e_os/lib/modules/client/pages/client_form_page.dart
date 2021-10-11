@@ -44,7 +44,7 @@ class _ClientFormPageState extends ModularState<ClientFormPage, ClientStore> {
     return Scaffold(
       body: ScopedBuilder<ClientStore, ApiError, ClientState>(
         onState: (context, state) {
-          if (!firstRenderFired) {
+          if (!firstRenderFired && widget.clientId != null) {
             firstRenderFired = true;
             return loading;
           }
@@ -56,77 +56,80 @@ class _ClientFormPageState extends ModularState<ClientFormPage, ClientStore> {
             appBarTitle: widget.clientId != null ? 'Editar Cliente' : 'Adicionar Cliente',
             slivers: [
               SliverToBoxAdapter(
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextFormField(
-                          autofocus: true,
-                          controller: fullNameController,
-                          decoration: InputDecoration(labelText: 'Nome Completo'),
-                          validator: (value) => value?.isEmpty == true ? 'Campo obrigatório' : null,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            autofocus: true,
+                            controller: fullNameController,
+                            decoration: InputDecoration(labelText: 'Nome Completo'),
+                            validator: (value) => value?.isEmpty == true ? 'Campo obrigatório' : null,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FlutterTextField.cpfCnpj(
-                          controller: cpfController,
-                          labelText: 'CPF',
-                          required: true,
-                          initialText: widget.clientId != null ? state.client?.cpf : null,
+                        if (widget.clientId == null)
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FlutterTextField.cpfCnpj(
+                              controller: cpfController,
+                              labelText: 'CPF',
+                              required: true,
+                            ),
+                          ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FlutterTextField.telefone(
+                            controller: telephoneController,
+                            labelText: 'Telefone',
+                            initialText: widget.clientId != null ? state.client?.telephone : null,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FlutterTextField.telefone(
-                          controller: telephoneController,
-                          labelText: 'Telefone',
-                          initialText: widget.clientId != null ? state.client?.telephone : null,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FlutterTextField.telefone(
+                            controller: whatsappController,
+                            labelText: 'WhatsApp',
+                            initialText: widget.clientId != null ? state.client?.whatsapp : null,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: FlutterTextField.telefone(
-                          controller: whatsappController,
-                          labelText: 'WhatsApp',
-                          initialText: widget.clientId != null ? state.client?.whatsapp : null,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: fullAddressController,
+                            decoration: InputDecoration(labelText: 'Endereço Completo'),
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextFormField(
-                          controller: fullAddressController,
-                          decoration: InputDecoration(labelText: 'Endereço Completo'),
-                        ),
-                      ),
-                      Divider(),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: OutlinedButton(
-                          onPressed: () async {
-                            if (formKey.currentState?.validate() == true) {
-                              if (await store.create(
-                                client: ClientModel(
-                                  fullName: fullNameController.text,
-                                  cpf: cpfController.unmaskedText,
-                                  fullAddress: fullAddressController.text.isNotEmpty ? fullAddressController.text : null,
-                                  telephone: telephoneController.unmaskedText.isNotEmpty ? telephoneController.unmaskedText : null,
-                                  whatsapp: whatsappController.unmaskedText.isNotEmpty ? whatsappController.unmaskedText : null,
-                                ),
-                              )) {
-                                Modular.to.pop();
+                        Divider(),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: OutlinedButton(
+                            onPressed: () async {
+                              if (formKey.currentState?.validate() == true) {
+                                if (await store.create(
+                                  client: ClientModel(
+                                    fullName: fullNameController.text,
+                                    cpf: cpfController.unmaskedText,
+                                    fullAddress: fullAddressController.text.isNotEmpty ? fullAddressController.text : null,
+                                    telephone: telephoneController.unmaskedText.isNotEmpty ? telephoneController.unmaskedText : null,
+                                    whatsapp: whatsappController.unmaskedText.isNotEmpty ? whatsappController.unmaskedText : null,
+                                  ),
+                                )) {
+                                  Modular.to.pop();
+                                }
                               }
-                            }
-                          },
-                          child: Text(widget.clientId != null ? 'EDITAR' : 'ADICIONAR'),
+                            },
+                            child: Text(widget.clientId != null ? 'EDITAR' : 'ADICIONAR'),
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 16,
-                      )
-                    ],
+                        SizedBox(
+                          height: 16,
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),

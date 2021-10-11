@@ -12,6 +12,15 @@ class ProductTypeFormPage extends StatefulWidget {
 
 class _ProductTypeFormPageState extends ModularState<ProductTypeFormPage, ProductTypeStore> {
   final descriptionController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+  Future<void> _handleSaveButtonPressed() async {
+    if (formKey.currentState?.validate() == true) {
+      if (await store.create(description: descriptionController.text)) {
+        Modular.to.pop();
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,22 +28,28 @@ class _ProductTypeFormPageState extends ModularState<ProductTypeFormPage, Produc
       appBarTitle: 'Adicionar tipo de produto',
       slivers: [
         SliverToBoxAdapter(
-          child: Column(
-            children: [
-              TextFormField(
-                autofocus: true,
-                controller: descriptionController,
-                decoration: InputDecoration(labelText: 'Descrição'),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      autofocus: true,
+                      controller: descriptionController,
+                      decoration: InputDecoration(labelText: 'Descrição'),
+                      validator: (value) => value?.isEmpty == true ? 'Campo obrigatório' : null,
+                    ),
+                  ),
+                  OutlinedButton(
+                    onPressed: _handleSaveButtonPressed,
+                    child: Text('ADICIONAR'),
+                  ),
+                ],
               ),
-              OutlinedButton(
-                onPressed: () async {
-                  if (await store.create(description: descriptionController.text)) {
-                    Modular.to.pop();
-                  }
-                },
-                child: Text('ADICIONAR'),
-              ),
-            ],
+            ),
           ),
         ),
       ],
